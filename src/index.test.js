@@ -1,8 +1,10 @@
 import {logflarePinoVercel, createWriteStream} from "./index"
 import {Writable} from "stream"
+import os from "os"
 import pino from "pino"
 import Pumpify from "pumpify"
 import {mockProcessStdout} from "jest-mock-process"
+
 
 describe("main", () => {
   it("logflarePinoVercel creates correct stream and transmit objects", async (done) => {
@@ -54,7 +56,7 @@ describe("main", () => {
       metadata: {
         structuredData: "value1",
         nestedStructed: {field: "value2"},
-        context: {host: "ontospace", pid: process.pid},
+        context: {host: os.hostname(), pid: process.pid},
         level: "info",
       },
       message: "comment",
@@ -86,7 +88,7 @@ describe("main", () => {
         structuredData: "value1",
         child1: true,
         nestedStructed: {field: "value2"},
-        context: {host: "ontospace", pid: process.pid},
+        context: {host: os.hostname(), pid: process.pid},
         level: "info",
       },
       message: "comment",
