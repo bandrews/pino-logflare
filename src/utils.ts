@@ -76,12 +76,12 @@ function toLogEntry(item: Record<string, any>) {
 // filters metadata out before sending it to Logflare.
 // It also returns a copy of 'item' to allow convenient chaining of calls.
 function filterMetadata(item: Record<string, any>, options?: PinoLogflareOptionsI) {
-  if (options && options.useIncludeFeature) {
+  if (options && options.useIncludeFeature && options.includeFields && options.extraMetadataFieldName) {
     if (item && isObject(item.metadata)) {
       let otherContext = _.omit(item.metadata, options.includeFields)
       item.metadata = {..._.pick(item.metadata, options.includeFields)}
       if (isObject(otherContext) && Object.keys(otherContext).length > 0) {
-        item.metadata[options.contextFieldName] = JSON.stringify(otherContext)
+        item.metadata[options.extraMetadataFieldName] = JSON.stringify(otherContext)
       }
     }
   }

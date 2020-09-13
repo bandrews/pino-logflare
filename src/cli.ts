@@ -29,7 +29,7 @@ function main() {
         const localConfig = {
           useIncludeFeature: options.include !== undefined,
           includeFields: Array.isArray(options.include) ? [...alwaysIncludedFields, ...options.include] : alwaysIncludedFields,
-          contextFieldName: options.contextname
+          extraMetadataFieldName: options.contextname
         }
         
         const writeStream = pinoLogflare.createWriteStream(config, localConfig)
