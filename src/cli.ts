@@ -24,8 +24,6 @@ function main() {
           apiBaseUrl: options.url || process.env.LOGFLARE_URL,
         }
 
-        console.log(options)
-        
         const localConfig = {
           useIncludeFeature: options.include !== undefined,
           includeFields: Array.isArray(options.include) ? [...alwaysIncludedFields, ...options.include] : alwaysIncludedFields,
