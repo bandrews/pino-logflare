@@ -27,15 +27,19 @@ child.info("hello child!");
 $ node index.js | pino-logflare --key YOUR_KEY --source YOUR_SOURCE_ID
 ```
 
+Note that the key and source parameters can be omitted if the LOGFLARE_API_KEY and LOGFLARE_SOURCE_TOKEN environment variables are set.
+
 ## Usage
 
 You can pass the following options via cli arguments or use the environment variable associated:
 
-| Short command | Full command            | Environment variable | Description                                                          |
-| ------------- | ----------------------- | -------------------- | -------------------------------------------------------------------- |
-| -V            | --version               |                      | Output the version number                                            |
-| -k            | --key &lt;apikey&gt;    | LOGFLARE_API_KEY     | The API key that can be found in your Logflare account               |
-| -s            | --source &lt;source&gt; | LOGFLARE_SOURCE_TOKEN| Default source for the logs                                          |
-| -h            | --help                  |                      | Output usage information                                             |
+| Short command | Full command              | Environment variable | Description                                                          |
+| ------------- | ------------------------- | -------------------- | -------------------------------------------------------------------- |
+| -V            | --version                 |                      | Output the version number                                            |
+| -k            | --key &lt;apikey&gt;      | LOGFLARE_API_KEY     | The API key that can be found in your Logflare account               |
+| -s            | --source &lt;source&gt;   | LOGFLARE_SOURCE_TOKEN| Default source for the logs                                          |
+| -i            | --include &lt;fields&gt;  |                      | Enables a reshaping feature for the metadata uploaded to Logflare.  Fields listed on the command line will be included as normal, and any fields not listed will be placed in a stringified JSON blob in another overflow field (named 'data' by default).  This feature can be helpful if you are upgrading an existing application that logs many objects with inconsistent field names to Pino (or objects with identifier names that are invalid in Google BigTable.)|
+| -c            | --contextname &lt;name&gt;|                      | Sets the name of the field used by the --include option.  If contextname is not specified, the default is "data". |
+| -h            | --help                    |                      | Output usage information                                             |
 
 See the [API](./API.md) documentation for details.

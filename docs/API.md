@@ -37,6 +37,31 @@ const child = logger.child({ property: "value" });
 child.info("hello child!");
 ```
 
+## Advanced Usage
+
+### Filtering metadata
+
+To keep fields concise in your Logflare source, you can choose to reshape the 'metadata' branch to include only certain field names.  If this feature is enabled, additional field names will be aggregated together into a plaintext JSON blob in a field with a name you designate.
+
+This data is provided in a second options parameter passed into the constructor of createWriteStream or createPinoBrowserSend:
+
+```js
+// create pino-logflare stream
+const stream = createWriteStream(
+    // Logflare client options
+    {
+        apiKey: "YOUR_API_KEY",
+        sourceToken: "b1b334ff-686c-472d-8fd7-XXXXXXXXXXXX"
+    },
+    // pino-logflare options
+    {
+          useIncludeFeature: true
+          includeFields: ['context', 'options', 'level'] //add your own fields in this array as needed
+          extraMetadataFieldName: "data"
+    }
+);
+```
+
 ## Functions
 
 ### createWriteStream
