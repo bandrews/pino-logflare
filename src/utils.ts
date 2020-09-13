@@ -80,7 +80,6 @@ function filterMetadata(item: Record<string, any>, options?: PinoLogflareOptions
     if (item && isObject(item.metadata)) {
       let otherContext = _.omit(item.metadata, options.includeFields)
       item.metadata = {..._.pick(item.metadata, options.includeFields)}
-      console.log(otherContext)
       if (isObject(otherContext) && Object.keys(otherContext).length > 0) {
         item.metadata[options.contextFieldName] = JSON.stringify(otherContext)
       }
