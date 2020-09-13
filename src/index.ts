@@ -16,7 +16,7 @@ const createPinoBrowserSend = (options: LogflareUserOptionsI, localOptions?: Pin
 
   return (level: number, logEvent: pinoBrowserLogEventI) => {
     let logflareLogEvent = formatPinoBrowserLogEvent(logEvent)
-    filterMetadata(logflareLogEvent, localOptions);
+    filterMetadata(logflareLogEvent, localOptions)
     client.postLogEvents([logflareLogEvent])
   }
 }
