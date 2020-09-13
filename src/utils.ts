@@ -1,5 +1,6 @@
 import _ from "lodash"
 import {isObject, isString} from "lodash"
+import PinoLogflareOptionsI from "./localOptions"
 
 function levelToStatus(level: number) {
   if (level === 10 || level === 20) {
@@ -21,11 +22,11 @@ interface pinoBrowserLogEventI {
   ts: number,
   messages: string[],
   bindings: object[],
-  level: { value: number, label: string }
+  level: {value: number, label: string}
 }
 
 const formatPinoBrowserLogEvent = (logEvent: pinoBrowserLogEventI) => {
-  const { ts, messages, bindings, level: { value: levelValue } } = logEvent
+  const {ts, messages, bindings, level: {value: levelValue}} = logEvent
   const level = levelToStatus(levelValue)
   const timestamp = ts
   const objMessages = _.filter(messages, isObject)
@@ -59,7 +60,7 @@ function toLogEntry(item: Record<string, any>) {
   const timestamp = item.time || new Date().getTime()
 
   const cleanedItem = _.omit(item, ["time", "level", "msg", "hostname", "service", "pid", "stack", "type"])
-  const context = _.pickBy({ host, service, pid, stack, type }, x => x)
+  const context = _.pickBy({host, service, pid, stack, type}, x => x)
   return {
     metadata: {
       ...cleanedItem,
@@ -71,4 +72,20 @@ function toLogEntry(item: Record<string, any>) {
   }
 }
 
-export { toLogEntry, formatPinoBrowserLogEvent, pinoBrowserLogEventI }
+// This function mutates the log entry in place to implement the -i option that
+// filters metadata out before sending it to Logflare.
+// It also returns a copy of 'item' to allow convenient chaining of calls.
+function filterMetadata(item: Record<string, any>, options?: PinoLogflareOptionsI) {
+  if (options && options.useIncludeFeature) {
+    if (item && isObject(item.metadata)) {
+      let otherContext = _.omit(item.metadata, options.includeFields)
+      item.metadata = {..._.pick(item.metadata, options.includeFields)}
+      console.log(otherContext)
+      if (isObject(otherContext) && Object.keys(otherContext).length > 0) {
+        item.metadata[options.contextFieldName] = JSON.stringify(otherContext)
+      }
+    }
+  }
+  return item
+}
+export {toLogEntry, formatPinoBrowserLogEvent, filterMetadata, pinoBrowserLogEventI}
